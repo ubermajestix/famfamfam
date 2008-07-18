@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+
+require File.expand_path(
+    File.join(File.dirname(__FILE__), '..', 'lib', 'famfamfam'))
+
+Main do
+  
+  
+    description <<-EOS
+  Famfamfam icons!
+
+  Gives you the ability to add, refresh, and remove famfamfam icons in your rails/merb app
+    EOS
+
+    examples <<-EOS
+    To add famfamfam icons to your app
+
+    	cd /your/rails/app/dir  
+
+    	famify #copies icons to public/images
+
+    	famify my_images/icons #copies icons to /your/rails/apps/dir/myimages/icons
+
+    To remove famfamfam icons from your app (and only famfamfam icons)
+
+    	famify remove #removes only famfamfam icons from public/images
+
+    	famify remove my_images/icons #removes only famfamfam icons from /your/rails/apps/dir/myimages/icons
+
+    EOS
+  
+  
+  
+  mixin :path_argument do
+    argument "path" do
+      argument_optional
+      attribute
+      default File.expand_path("." + "/public/images")
+    end
+  end
+  
+  mode "remove" do
+    mixin :path_argument
+    run do
+      Famfamfam.remove_icons path
+    end
+  end
+  
+  mode "refresh" do
+    mixin :path_argument
+    run do
+      Famfamfam.remove_icons path
+      Famfamfam.copy_icons path
+    end
+  end
+  
+  mixin :path_argument
+  
+  run do
+    Famfamfam.copy_icons path
+  end
+end
+
+
+# EOF
